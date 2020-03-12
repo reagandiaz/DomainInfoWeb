@@ -40,14 +40,18 @@ namespace DomainInfoCore.Tasks
                 var myJObject = JObject.Parse(responseFromServer);
 
                 StringBuilder sb = new StringBuilder();
-                sb.Append($"{myJObject.SelectToken("continent_name").Value<string>()}, ");
-                sb.Append($"{myJObject.SelectToken("country_name").Value<string>()}, ");
-                sb.Append($"{myJObject.SelectToken("region_name").Value<string>()}, ");
-                sb.Append($"{myJObject.SelectToken("city").Value<string>()} ");
 
+                if (String.IsNullOrEmpty(myJObject.SelectToken("continent_name").Value<string>()))
+                    sb.Append("Not Found");
+                else
+                {
+                    sb.Append($"{myJObject.SelectToken("continent_name").Value<string>()}, ");
+                    sb.Append($"{myJObject.SelectToken("country_name").Value<string>()}, ");
+                    sb.Append($"{myJObject.SelectToken("region_name").Value<string>()}, ");
+                    sb.Append($"{myJObject.SelectToken("city").Value<string>()} ");
+                }
                 result.Message = sb.ToString();
                 result.State = TaskState.Complete;
-
             }
             catch (Exception ex)
             {
