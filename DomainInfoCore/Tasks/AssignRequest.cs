@@ -1,9 +1,9 @@
-﻿using CoreDefinition.Task;
-using DomainInfoCore.DataObject;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using CoreDefinition.Task;
+using DomainInfoCore.DataObject;
 
 namespace DomainInfoCore.Tasks
 {

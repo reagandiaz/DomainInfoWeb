@@ -6,7 +6,6 @@ using System.Text;
 using System.Threading;
 using CoreDefinition.Task;
 using DomainInfoCore.DataObject;
-using IntegrationTools;
 
 namespace DomainInfoCore.Tasks
 {

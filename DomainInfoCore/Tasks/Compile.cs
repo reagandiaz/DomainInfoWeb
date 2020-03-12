@@ -1,11 +1,11 @@
-﻿using CoreDefinition.Task;
-using DomainInfoCore.DataObject;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 using System.Linq;
+using CoreDefinition.Task;
+using DomainInfoCore.DataObject;
 
 namespace DomainInfoCore.Tasks
 {

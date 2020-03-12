@@ -1,9 +1,9 @@
-﻿using CoreDefinition;
+﻿using System.Collections.Generic;
+using System.Linq;
+using CoreDefinition;
 using CoreDefinition.Task;
 using DomainInfoCore.DataObject;
 using DomainInfoCore.Tasks;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace DomainInfoCore
 {
@@ -83,6 +83,5 @@ namespace DomainInfoCore
             }
             return items;
         }
-
     }
 }

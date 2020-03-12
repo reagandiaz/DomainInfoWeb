@@ -14,17 +14,20 @@ namespace DomainInfoService.Models
         public void Load(IPResult match)
         {
             ip = match.IP;
-            reports = new Models.ReportItem[match.ReportCount];
-            for (int i = 0; i < reports.Length; i++)
+            if (match.TaskReports.Count > 0)
             {
-                reports[i] = new Models.ReportItem()
+                reports = new Models.ReportItem[match.TaskReports.Count];
+                for (int i = 0; i < reports.Length; i++)
                 {
-                    task = Enum.GetName(match.TaskReports[i].TaskType.GetType(), match.TaskReports[i].TaskType),
-                    start = match.TaskReports[i].Start,
-                    end = match.TaskReports[i].End,
-                    message = match.TaskReports[i].Message,
-                    state = Enum.GetName(match.TaskReports[i].State.GetType(), match.TaskReports[i].State),
-                };
+                    reports[i] = new Models.ReportItem()
+                    {
+                        task = Enum.GetName(match.TaskReports[i].TaskType.GetType(), match.TaskReports[i].TaskType),
+                        start = match.TaskReports[i].Start,
+                        end = match.TaskReports[i].End,
+                        message = match.TaskReports[i].Message,
+                        state = Enum.GetName(match.TaskReports[i].State.GetType(), match.TaskReports[i].State),
+                    };
+                }
             }
         }
     }

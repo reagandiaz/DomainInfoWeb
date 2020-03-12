@@ -1,15 +1,10 @@
-﻿
-//using Microsoft.AspNetCore.Mvc.ApiExplorer;
-//using Microsoft.Build.Evaluation;
-using Microsoft.OpenApi.Models;
-using Swashbuckle.AspNetCore.SwaggerGen;
-//using Swashbuckle.Swagger;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Reflection;
 using System.Threading.Tasks;
+using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.SwaggerGen;
 using Operation = Microsoft.Build.Evaluation.Operation;
 
 namespace DomainInfoService.Swagger

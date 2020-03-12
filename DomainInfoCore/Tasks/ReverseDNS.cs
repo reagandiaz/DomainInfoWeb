@@ -4,10 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Text;
-using System.Threading;
 using CoreDefinition.Task;
 using DomainInfoCore.DataObject;
-using IntegrationTools;
 
 namespace DomainInfoCore.Tasks
 {
@@ -17,6 +15,7 @@ namespace DomainInfoCore.Tasks
 
         public override TaskResultItem ExecuteProcess(TaskQueueItem queue)
         {
+        
             /*consume service here*/
             var result = new TaskResultItem(queue);
 

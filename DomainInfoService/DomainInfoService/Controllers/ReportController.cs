@@ -77,17 +77,22 @@ namespace DomainInfoService.Controllers
                     var match = DomainInfoHostedService.Engine.Cache.Reports.SingleOrDefault(s => s.ID == qp.Id);
                     if (match == null)
                     {
-                        resp.message = "Message: request is being processed";
+                        resp.message = "Message: no partial result yet";
                         return resp;
                     }
                     if (qp.Getpartial)
                     {
                         resp.Load(match);
-                        resp.message = match.Complete ? "Message: Complete!" : "Message: Partial result";
+                        resp.message = match.Complete ? "Message: Complete!" : $"Message: {(resp.reports == null ? 0 : resp.reports.Length)} partial result";
                         return resp;
                     }
-                    resp.Load(match);
-                    resp.message = "Message: Complete!";
+                    if (match.Complete)
+                    {
+                        resp.Load(match);
+                        resp.message = "Message: Complete!";
+                        return resp;
+                    }
+                    resp.message = $"Message: {(resp.reports == null ? 0 : resp.reports.Length)} partial result";
                 }
             }
             catch (Exception ex)
