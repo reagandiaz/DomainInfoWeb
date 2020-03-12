@@ -13,7 +13,7 @@ namespace DomainInfoCore.Tasks
     {
         public Compile(Cache cache) : base(cache) { }
 
-        public static ICollection CreatTaskQueueItems(object cache)
+        public static ICollection CreatTaskQueueItems(basecache cache)
         {
             var rawresult = ((DomainInfoCore.Cache)cache).PurgeRawResult();
             List<IPResult> queue = new List<IPResult>();

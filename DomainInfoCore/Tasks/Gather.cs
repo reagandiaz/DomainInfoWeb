@@ -14,7 +14,7 @@ namespace DomainInfoCore.Tasks
     {
         public Gather(Cache cache) : base(cache) { }
 
-        public static ICollection CreatTaskQueueItems(object cache)
+        public static ICollection CreatTaskQueueItems(basecache cache)
         {
             List<TaskResultItem> items = new List<TaskResultItem>();
 

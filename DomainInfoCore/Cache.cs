@@ -1,26 +1,17 @@
-﻿using System;
+﻿using CoreDefinition;
+using CoreDefinition.Task;
+using DomainInfoCore.DataObject;
+using DomainInfoCore.Tasks;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using CoreDefinition.Task;
-using DomainInfoCore.Tasks;
-using System.IO;
-using System.Reflection;
-using DomainInfoCore.DataObject;
-using IntegrationTools;
-using CoreDefinition;
 
 namespace DomainInfoCore
 {
-    public class Cache : ILogger
-    {
-        public static readonly string Path = System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-
-        readonly Logger logger;
+    public class Cache : basecache
+    {       
         List<basetask> tasks;
         List<basetask> taskprocess;
 
-        public Logger Logger => logger;
         public List<basetask> Tasks => tasks;
         public List<basetask> TaskProcesses => taskprocess;
 
@@ -32,9 +23,8 @@ namespace DomainInfoCore
         public List<TaskResultItem> TaskReports => taskreports;
         public List<IPResult> Reports => reports;
 
-        public Cache()
+        public Cache(string path): base(path)
         {
-            this.logger = new Logger(string.Format("{0}\\{1}", System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "_logs"));
             requests = new List<IPRequest>();
             taskreports = new List<TaskResultItem>();
             reports = new List<IPResult>();

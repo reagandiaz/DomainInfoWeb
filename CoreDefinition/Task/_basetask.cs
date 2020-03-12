@@ -10,18 +10,18 @@ namespace CoreDefinition.Task
 {
     public abstract class basetask
     {
-        protected readonly Object _cache;
-        protected readonly Logger _logger;
-        protected readonly DateTime _start;
+        protected readonly basecache cache;
+        protected readonly Logger logger;
+        protected readonly DateTime start;
         protected volatile int queuecnt;
 
         public delegate ICollection GetQueueCallback(int maxitemcnt);
 
-        public delegate ICollection GetQueueCallbackNoThreshold(object cache);
+        public delegate ICollection GetQueueCallbackNoThreshold(basecache cache);
 
         public int Frequency { get; set; }
         public int Threshold { get; set; }
-        public Object Cache => _cache;
+        public basecache Cache => cache;
 
         public GetQueueCallback GetQueue { get; set; }
 
@@ -29,20 +29,20 @@ namespace CoreDefinition.Task
 
         public abstract void TaskExecute(ICollection queue);
 
-        protected basetask(object cache)
+        protected basetask(basecache cache)
         {
-            _cache = cache;
-            _logger = ((ILogger)cache).Logger;
-            _start = DateTime.Now;
+            this.cache = cache;
+            logger = cache.Logger;
+            start = DateTime.Now;
         }
 
         public void Execute()
         {
-            if (_start.AddSeconds(Frequency) <= DateTime.Now)
+            if (start.AddSeconds(Frequency) <= DateTime.Now)
             {
                 if (GetQueueNoThreshold != null)
                 {
-                    var queue = GetQueueNoThreshold(Cache);
+                    var queue = GetQueueNoThreshold(this.cache);
                     if (queue.Count > 0)
                         TaskExecute(queue);
                 }

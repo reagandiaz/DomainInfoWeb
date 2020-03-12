@@ -5,8 +5,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="DataConversion\**" />
+    <Compile Remove="Serialization\**" />
+    <EmbeddedResource Remove="DataConversion\**" />
+    <EmbeddedResource Remove="Serialization\**" />
+    <None Remove="DataConversion\**" />
+    <None Remove="Serialization\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Remove="AsynchProcessor.cs" />
-    <Compile Remove="Serialization\CSVReader.cs" />
   </ItemGroup>
 
 </Project>

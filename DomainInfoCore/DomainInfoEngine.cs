@@ -5,6 +5,7 @@ using System.Text;
 using CoreDefinition;
 using DomainInfoCore.Tasks;
 using CoreDefinition.Task;
+using System.Reflection;
 
 namespace DomainInfoCore
 {
@@ -16,7 +17,7 @@ namespace DomainInfoCore
 
         public override void Initialize()
         {
-            cache = new Cache();
+            cache = new Cache((string.Format("{0}\\{1}", System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "_logs")));
             tasks = cache.Tasks;  
         }
 

@@ -34,7 +34,6 @@ namespace CoreDefinition
                 _tasktimer.Elapsed += new ElapsedEventHandler(TaskTick);
                 _tasktimer.Enabled = true;
             }))).Start();
-
         }
 
         public void Stop()
