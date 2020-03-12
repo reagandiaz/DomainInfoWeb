@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <UserSecretsId>3d06e494-6d42-4dad-89ea-2efacd79707d</UserSecretsId>
+    <DockerDefaultTargetOS>Windows</DockerDefaultTargetOS>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Background\BackgroundService.cs" />
+    <Compile Remove="Background\HelloWorld.cs" />
+    <Compile Remove="Background\xHelloWorldHostedService.cs" />
+    <Compile Remove="Controllers\HostInfoController.cs" />
+    <Compile Remove="Controllers\WeatherForecastController.cs" />
+    <Compile Remove="WeatherForecast.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Build" Version="16.4.0" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.9.10" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.1" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="5.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\DomainInfoCore\DomainInfoCore.csproj" />
+  </ItemGroup>
+
+
+</Project>
