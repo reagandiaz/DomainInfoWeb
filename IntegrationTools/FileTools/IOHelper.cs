@@ -18,7 +18,11 @@ namespace IntegrationTools.FileTools
             string data = string.Empty;
             try
             {
-                data = new FileInfo(path).OpenText().ReadToEnd();
+                using (StreamReader reader = new FileInfo(path).OpenText())
+                {
+                    data = reader.ReadToEnd();
+                    reader.Close();
+                }
             }
             catch
             {
@@ -108,6 +112,7 @@ namespace IntegrationTools.FileTools
                 using (StreamWriter w = File.AppendText(path))
                 {
                     w.WriteLine(line);
+                    w.Close();
                 }
             }
             catch
