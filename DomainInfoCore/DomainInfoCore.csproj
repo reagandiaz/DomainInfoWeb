@@ -5,6 +5,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Tasks\Gather.cs" />
+    <Compile Remove="Tasks\GeoIP.cs" />
+    <Compile Remove="Tasks\Ping.cs" />
+    <Compile Remove="Tasks\ReverseDNS.cs" />
+    <Compile Remove="Tasks\TaskProcessTemplate.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     <PackageReference Include="System.Net.Ping" Version="4.3.0" />
   </ItemGroup>

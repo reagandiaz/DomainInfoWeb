@@ -19,10 +19,10 @@ namespace DomainInfoCore.Tasks
             List<IPResult> queue = new List<IPResult>();
             if (rawresult.Count > 0)
             {
-                rawresult.GroupBy(s => s.TaskQueueSource.ID).ToList().ForEach(s =>
+                rawresult.GroupBy(s => s.ID).ToList().ForEach(s =>
                 {
                     var res = s.ToList();
-                    var ipres = new IPResult(s.Key, res[0].TaskQueueSource.IP, res[0].TaskQueueSource.ReportCount);
+                    var ipres = new IPResult(s.Key, res[0].IP, res[0].ReportCount);
                     ipres.AddResults(res);
                     queue.Add(ipres);
                 });

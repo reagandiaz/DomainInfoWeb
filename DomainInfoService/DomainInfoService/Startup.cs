@@ -41,9 +41,6 @@ namespace DomainInfoService
                 //add custom 
                 c.SchemaFilter<DomainInfoService.Swagger.SchemaFilter>();
             });
-
-
-
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

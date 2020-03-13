@@ -21,8 +21,8 @@ namespace DomainInfoCore.DataObject
 
         public TaskReport(TaskResultItem tr)
         {
-            type = tr.TaskQueueSource.TaskType;
-            start = tr.TaskQueueSource.QueueTS;
+            type = tr.TaskType;
+            start = tr.QTS;
             end = tr.TS;
             message = tr.Message;
             state = tr.State;

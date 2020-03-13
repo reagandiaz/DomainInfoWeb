@@ -39,15 +39,13 @@ namespace DomainInfoCore.Tasks
 
         public override void TaskExecute(ICollection queue)
         {
-            ((List<TaskQueueItem>)queue).GroupBy(s => s.TaskType).ToList().ForEach(s =>
+            var taskqueue = ((DomainInfoCore.Cache)Cache).TaskQueue;
+            ThreadPool.QueueUserWorkItem(c =>
             {
-                var tasktable = ((DomainInfoCore.Cache)Cache).TaskProcesses;
-                ThreadPool.QueueUserWorkItem(c =>
+                lock (taskqueue)
                 {
-                    var task = tasktable.SingleOrDefault(t => s.Key == ((TaskProcessTemplate)t).TaskType);
-                    if (task != null)
-                        ((TaskProcessTemplate)task).AddQueue(s.ToList());
-                });
+                    taskqueue.AddRange((List<TaskQueueItem>)queue);
+                }
             });
         }
     }

@@ -6,22 +6,13 @@ namespace DomainInfoCore.DataObject
 {
     public class TaskResultItem
     {
-        TaskQueueItem tqitem;
-        DateTime ts;
-
-        public TaskQueueItem TaskQueueSource => tqitem;
-
-        public DateTime TS => ts;
-
+        public Int64 ID { get; set; }
+        public string IP { get; set; }
+        public TaskType TaskType { get; set; }
+        public DateTime TS { get; set; }
+        public DateTime QTS { get; set; }
         public string Message { get; set; }
-
         public TaskState State { get; set; }
-
-        public TaskResultItem(TaskQueueItem tq)
-        {
-            //completed
-            ts = DateTime.Now;
-            tqitem = tq;
-        }
+        public int ReportCount { get; set; }
     }
 }
