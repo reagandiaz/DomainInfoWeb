@@ -38,11 +38,9 @@ namespace DomainInfoCore
                 /*routines*/
                 new AssignRequest(this){
                     Frequency = 5,
-                    GetQueueNoThreshold = AssignRequest.CreatTaskQueueItems,
                     },
                 new Compile(this){
                     Frequency = 5,
-                    GetQueueNoThreshold = Compile.CreatTaskQueueItems,
                     },
             };
 

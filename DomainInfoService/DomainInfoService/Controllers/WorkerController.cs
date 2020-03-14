@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using DomainInfoCore.DataObject;
 using DomainInfoService.Background;
 using DomainInfoService.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Hosting;
 
 namespace DomainInfoService.Controllers
 {
@@ -71,16 +69,18 @@ namespace DomainInfoService.Controllers
                     }); ;
                 });
 
-                lock (DomainInfoHostedService.Engine.Cache.TaskReports)
+                Task.Run(() =>
                 {
-                    DomainInfoHostedService.Engine.Cache.TaskReports.AddRange(tri);
-                }
+                    lock (DomainInfoHostedService.Engine.Cache.TaskReports)
+                    {
+                        DomainInfoHostedService.Engine.Cache.TaskReports.AddRange(tri);
+                    }
+                });
             }
             catch (Exception ex)
             {
                 DomainInfoHostedService.Engine.Cache.Logger.StampEx(ex);
             }
         }
-
     }
 }

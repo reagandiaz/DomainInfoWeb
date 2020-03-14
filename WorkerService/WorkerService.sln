@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PingWorkerService", "PingWo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ReverseDNSWorkerService", "ReverseDNSWorkerService\ReverseDNSWorkerService.csproj", "{CA02375D-87FE-422A-9C40-F5D9DFBA73FC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WorkerCore", "WorkerCore\WorkerCore.csproj", "{26E3E89C-D0B4-414E-9522-E3B289ED1169}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{CA02375D-87FE-422A-9C40-F5D9DFBA73FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CA02375D-87FE-422A-9C40-F5D9DFBA73FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CA02375D-87FE-422A-9C40-F5D9DFBA73FC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{26E3E89C-D0B4-414E-9522-E3B289ED1169}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{26E3E89C-D0B4-414E-9522-E3B289ED1169}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{26E3E89C-D0B4-414E-9522-E3B289ED1169}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{26E3E89C-D0B4-414E-9522-E3B289ED1169}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using DomainInfoService.Background;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Hosting;
 
 namespace DomainInfoService.Controllers
 {
@@ -48,7 +45,7 @@ namespace DomainInfoService.Controllers
                 state.message = "Success:queued";
 
                 //loads the ip to queue
-                ThreadPool.QueueUserWorkItem(c =>
+                Task.Run(() =>
                 {
                     lock (DomainInfoHostedService.Engine.Cache.Requests)
                     {
@@ -83,7 +80,7 @@ namespace DomainInfoService.Controllers
                     if (qp.Getpartial)
                     {
                         resp.Load(match);
-                        resp.message = match.Complete ? "Message: Complete!" : $"Message: {(resp.reports == null ? 0 : resp.reports.Length)} partial result";
+                        resp.message = match.Complete ? "Message: Complete!" : $"Message: {(resp.reports == null ? 0 : match.TaskReports.Count)} partial result";
                         return resp;
                     }
                     if (match.Complete)
@@ -92,7 +89,7 @@ namespace DomainInfoService.Controllers
                         resp.message = "Message: Complete!";
                         return resp;
                     }
-                    resp.message = $"Message: {(resp.reports == null ? 0 : resp.reports.Length)} partial result";
+                    resp.message = $"Message: {(match.TaskReports.Count)} partial result";
                 }
             }
             catch (Exception ex)

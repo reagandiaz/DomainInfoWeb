@@ -1,6 +1,5 @@
 ﻿using DomainInfoCore.DataObject;
 using System;
-using System.ComponentModel.DataAnnotations;
 
 namespace DomainInfoService.Models
 {

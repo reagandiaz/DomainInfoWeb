@@ -12,20 +12,13 @@ namespace CoreDefinition.Task
     {
         protected readonly basecache cache;
         protected readonly Logger logger;
-        protected readonly DateTime start;
-        protected volatile int queuecnt;
+        DateTime lastrun;
 
-        public delegate ICollection GetQueueCallback(int maxitemcnt);
-
-        public delegate ICollection GetQueueCallbackNoThreshold(basecache cache);
+        public abstract ICollection GetQueue(basecache cache);
 
         public int Frequency { get; set; }
-        public int Threshold { get; set; }
+
         public basecache Cache => cache;
-
-        public GetQueueCallback GetQueue { get; set; }
-
-        public GetQueueCallbackNoThreshold GetQueueNoThreshold { get; set; }
 
         public abstract void TaskExecute(ICollection queue);
 
@@ -33,29 +26,19 @@ namespace CoreDefinition.Task
         {
             this.cache = cache;
             logger = cache.Logger;
-            start = DateTime.Now;
+            lastrun = DateTime.MinValue;
         }
 
         public void Execute()
         {
-            if (start.AddSeconds(Frequency) <= DateTime.Now)
+            if (lastrun.AddSeconds(Frequency) <= DateTime.Now)
             {
-                if (GetQueueNoThreshold != null)
-                {
-                    var queue = GetQueueNoThreshold(this.cache);
-                    if (queue.Count > 0)
-                        TaskExecute(queue);
-                }
-                else
-                {
-                    int maxqueuecnt = Threshold - queuecnt;
-                    if (maxqueuecnt > 0)
-                    {
-                        ICollection toprocess = GetQueue(maxqueuecnt);
-                        TaskExecute(toprocess);
-                    }
-                }
+                var queue = GetQueue(this.cache);
+                if (queue.Count > 0)
+                    TaskExecute(queue);
+                lastrun = DateTime.Now;
             }
         }
     }
 }
+

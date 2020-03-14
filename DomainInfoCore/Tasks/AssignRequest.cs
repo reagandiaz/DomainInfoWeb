@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using CoreDefinition.Task;
 using DomainInfoCore.DataObject;
 
@@ -11,7 +12,7 @@ namespace DomainInfoCore.Tasks
     {
         public AssignRequest(Cache cache) : base(cache) { }
 
-        public static ICollection CreatTaskQueueItems(basecache cache)
+        public override ICollection GetQueue(basecache cache)
         {
             List<TaskQueueItem> queue = new List<TaskQueueItem>();
             var iprequest = (((DomainInfoCore.Cache)cache).Requests);
@@ -40,7 +41,7 @@ namespace DomainInfoCore.Tasks
         public override void TaskExecute(ICollection queue)
         {
             var taskqueue = ((DomainInfoCore.Cache)Cache).TaskQueue;
-            ThreadPool.QueueUserWorkItem(c =>
+            Task.Run(() =>
             {
                 lock (taskqueue)
                 {

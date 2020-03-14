@@ -6,6 +6,7 @@ using System.Threading;
 using System.Linq;
 using CoreDefinition.Task;
 using DomainInfoCore.DataObject;
+using System.Threading.Tasks;
 
 namespace DomainInfoCore.Tasks
 {
@@ -13,7 +14,7 @@ namespace DomainInfoCore.Tasks
     {
         public Compile(Cache cache) : base(cache) { }
 
-        public static ICollection CreatTaskQueueItems(basecache cache)
+        public override ICollection GetQueue(basecache cache)
         {
             var rawresult = ((DomainInfoCore.Cache)cache).PurgeRawResult();
             List<IPResult> queue = new List<IPResult>();
@@ -32,7 +33,7 @@ namespace DomainInfoCore.Tasks
 
         public override void TaskExecute(ICollection queue)
         {
-            ThreadPool.QueueUserWorkItem(c =>
+            Task.Run(() =>
             {
                 var resultcache = ((DomainInfoCore.Cache)Cache).Reports;
                 lock (resultcache)
