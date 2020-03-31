@@ -3,6 +3,7 @@ using System.Net.NetworkInformation;
 using System.Text;
 using Microsoft.Extensions.Logging;
 using WorkerCore;
+using WorkerCore.DomainInfo;
 
 namespace PingWorkerService
 {
@@ -11,9 +12,9 @@ namespace PingWorkerService
         private readonly ILogger<Worker> _logger;
         public Handler(string url, string taskname, ILogger<Worker> logger) : base(url, taskname) { _logger = logger; }
         public override void OnException(Exception ex) => _logger.LogError(ex, "Error");
-        public override WorkerCore.WorkerReportItem Process(WorkerCore.WorkerQueueItem wqi)
+        public override WorkerReportItem Process(WorkerQueueItem wqi)
         {
-            var result = new WorkerReportItem() { id = wqi.id, ip = wqi.ip, rprtcnt = wqi.rpcnt, qts = wqi.qts };
+            var result = new WorkerReportItem() { Id = wqi.Id, Ip = wqi.Ip, Rprtcnt = wqi.Rpcnt, Qts = wqi.Qts };
             /*nuget System.NET.Ping*/
 
             StringBuilder sb = new StringBuilder();
@@ -27,7 +28,7 @@ namespace PingWorkerService
                 };
                 byte[] buffer = Encoding.ASCII.GetBytes(data);
                 const int timeout = 1024;
-                PingReply reply = pingSender.Send(wqi.ip, timeout, buffer, options);
+                PingReply reply = pingSender.Send(wqi.Ip, timeout, buffer, options);
                 if (reply.Status == IPStatus.Success)
                 {
                     sb.Append($"Address: {reply.Address} ");
@@ -38,15 +39,15 @@ namespace PingWorkerService
                 }
                 else
                     sb.Append(reply.Status);
-                result.state = "Complete";
+                result.State = "Complete";
             }
             catch (Exception ex)
             {
-                result.state = "Error";
+                result.State = "Error";
                 sb.Append(ex.Message);
             }
-            result.message = sb.ToString();
-            result.ts = DateTime.Now;
+            result.Message = sb.ToString();
+            result.Ts = DateTime.Now;
             return result;
         }
     }

@@ -1,19 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Net;
-using System.Text;
 using System.Threading.Tasks;
-using System.Text.Json;
-using System.Threading;
+using System.Net.Http;
+using WorkerCore.DomainInfo;
+using System.Linq;
 
 namespace WorkerCore
 {
     public abstract class basehandler
     {
-        readonly string taskname;
-        readonly string url;
+        protected readonly string taskname;
+        protected readonly string url;
         public List<WorkerQueueItem> queue = new List<WorkerQueueItem>();
         public List<WorkerReportItem> report = new List<WorkerReportItem>();
 
@@ -24,72 +21,38 @@ namespace WorkerCore
         }
 
         public abstract void OnException(Exception ex);
-        public void Request()
-        {
-            HttpWebResponse response = null;
-            Stream dataStream = null;
-            StreamReader reader = null;
-            try
-            {
-                WebRequest request = WebRequest.Create(string.Format("{0}?task={1}", url, taskname));
-                request.Method = "PUT";
-                response = (HttpWebResponse)request.GetResponse();
-                dataStream = response.GetResponseStream();
-                reader = new StreamReader(dataStream);
-                string responseFromServer = reader.ReadToEnd();
 
-                if (responseFromServer != "[]")
+        public async Task Request()
+        {
+            using (HttpClient client = new HttpClient())
+            {
+                try
                 {
-                    var newqueue = JsonSerializer.Deserialize<WorkerQueueItem[]>(responseFromServer);
-                    lock (queue)
-                    {
-                        queue.AddRange(newqueue.ToList());
-                    }
+                    DomainInfo.DomainInfoClient swclient = new DomainInfo.DomainInfoClient(this.url, client);
+                    var result = (await swclient.WorkerAllAsync(taskname)).ToList();
+                    queue.AddRange(result);
                 }
-            }
-            catch (Exception ex)
-            {
-                OnException(ex);
-            }
-            finally
-            {
-                // Cleanup the streams and the response.
-                if (reader != null) reader.Close();
-                if (dataStream != null) dataStream.Close();
-                if (response != null) response.Close();
+                catch (Exception ex)
+                {
+                    OnException(ex);
+                }
             }
         }
+
         public abstract WorkerReportItem Process(WorkerQueueItem wqi);
-        public void ReportToAPI(List<WorkerReportItem> ritems)
+        public async Task ReportToAPI(List<WorkerReportItem> ritems)
         {
-            HttpWebResponse response = null;
-            Stream dataStream = null;
-            StreamReader reader = null;
-            try
+            using (HttpClient client = new HttpClient())
             {
-                WebRequest request = WebRequest.Create(string.Format("{0}?task={1}", url, taskname));
-                request.ContentType = "application/json";
-                request.Method = "POST";
-                var payload = JsonSerializer.Serialize<List<WorkerReportItem>>(ritems);
-                request.ContentLength = payload.Length;
-                using (var streamWriter = new StreamWriter(request.GetRequestStream()))
+                try
                 {
-                    streamWriter.Write(payload);
+                    DomainInfo.DomainInfoClient swclient = new DomainInfo.DomainInfoClient(this.url, client);
+                    await swclient.WorkerAsync(taskname, ritems);
                 }
-                response = (HttpWebResponse)request.GetResponse();
-                dataStream = response.GetResponseStream();
-                // Open the stream using a StreamReader for easy access.
-                reader = new StreamReader(dataStream);
-                // Read the content.
-                string responseFromServer = reader.ReadToEnd();
-            }
-            catch (Exception ex)
-            {
-                OnException(ex);
-            }
-            finally
-            {
-                if (response != null) response.Close();
+                catch (Exception ex)
+                {
+                    OnException(ex);
+                }
             }
         }
     }
