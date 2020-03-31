@@ -1,0 +1,9 @@
+{
+  "config": [
+    {
+      "host": "DomainInfo",
+      "url": "http://localhost:1111",
+      "thread": "5"
+    } 
+  ]
+}
