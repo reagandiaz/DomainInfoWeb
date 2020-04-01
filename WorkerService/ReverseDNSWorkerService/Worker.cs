@@ -45,15 +45,7 @@ namespace ReverseDNSWorkerService
                 var batches = QueueHelper.CreateQueue<WorkerQueueItem>(toprocess, threadcount);
 
                 if (batches.Count > 0)
-                {
-                    Task<List<WorkerReportItem>>[] tasks = new Task<List<WorkerReportItem>>[batches.Count];
-                    for (int i = 0; i < tasks.Length; i++)
-                        tasks[i] = GetReportItems(handler, batches[i]);
-
-                    Task.WaitAll(tasks);
-
-                    handler.report.AddRange((tasks.Select(s => s.Result).ToList()).SelectMany(s => s));
-                }
+                    handler.report.AddRange(GetInfo(batches));
 
                 var toupload = new List<WorkerReportItem>();
 
@@ -64,16 +56,32 @@ namespace ReverseDNSWorkerService
                 }
 
                 if (toupload.Count > 0)
-                {
                     await handler.ReportToAPI(toupload);
-                }
 
                 _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
                 await Task.Delay(5000, stoppingToken);
             }
         }
 
-        Task<List<WorkerReportItem>> GetReportItems(Handler handler, List<WorkerQueueItem> toprocess)
+        public List<WorkerReportItem> GetInfo(List<List<WorkerQueueItem>> batches)
+        {
+            Task<List<WorkerReportItem>>[] tasks = new Task<List<WorkerReportItem>>[batches.Count];
+            for (int i = 0; i < tasks.Length; i++)
+            {
+                var hardcopy = batches[i].Select(s => new WorkerQueueItem()
+                {
+                    Id = s.Id,
+                    Ip = s.Ip,
+                    Qts = s.Qts,
+                    Rpcnt = s.Rpcnt
+                }).ToList();
+                tasks[i] = Task.Run(() => GetReportItems(handler, hardcopy));
+            }
+            Task.WaitAll(tasks);
+            return tasks.Select(s => s.Result).SelectMany(s => s).ToList();
+        }
+
+        public Task<List<WorkerReportItem>> GetReportItems(Handler handler, List<WorkerQueueItem> toprocess)
         {
             List<WorkerReportItem> reports = new List<WorkerReportItem>();
             toprocess.ForEach(s => { WorkerReportItem repitem = handler.Process(s); reports.Add(repitem); });
