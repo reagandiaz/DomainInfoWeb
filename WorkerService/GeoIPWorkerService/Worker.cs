@@ -16,7 +16,6 @@ namespace GeoIPWorkerService
         private readonly ILogger<Worker> _logger;
         private Handler handler;
         private readonly int threadcount;
-
         public Worker(ILogger<Worker> logger)
         {
             string name = System.Reflection.Assembly.GetExecutingAssembly().GetName().Name;
@@ -59,7 +58,7 @@ namespace GeoIPWorkerService
                     await handler.ReportToAPI(toupload);
 
                 _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
-                await Task.Delay(5000, stoppingToken);
+                await Task.Delay(3000, stoppingToken);
             }
         }
 

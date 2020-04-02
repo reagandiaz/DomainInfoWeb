@@ -20,19 +20,19 @@ namespace ReverseDNSWorkerService
                 if (System.Net.IPAddress.TryParse(wqi.Ip, out address))
                 {
                     //an ip
-                    result.Message = Dns.GetHostEntry(wqi.Ip).HostName;
+                    result.Data = Dns.GetHostEntry(wqi.Ip).HostName;
                     result.State = "Complete";
                 }
                 else
                 {
                     //domain
-                    result.Message = Dns.GetHostAddresses(wqi.Ip)[0].ToString();
+                    result.Data = Dns.GetHostAddresses(wqi.Ip)[0].ToString();
                     result.State = "Complete";
                 }
             }
             catch (System.Exception ex)
             {
-                result.Message = ex.Message;
+                result.Data = $"{ ex.Message}:{ex.StackTrace}";
                 result.State = "Error";
             }
             result.Ts = DateTime.Now;

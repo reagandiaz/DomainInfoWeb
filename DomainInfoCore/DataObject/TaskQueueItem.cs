@@ -14,7 +14,7 @@ namespace DomainInfoCore.DataObject
 
         public DateTime QueueTS => ts;
 
-        public int ReportCount => rpcnt; 
+        public int ReportCount => rpcnt;
 
         readonly Int64 id;
 
@@ -37,7 +37,7 @@ namespace DomainInfoCore.DataObject
 
         public override string ToString()
         {
-            return string.Format("{0}: ID:{1} IP:{2} TS:{3}", Enum.GetName(TaskType.GetType(), type), id, ip, ts.ToShortTimeString());
+            return $"{Enum.GetName(TaskType.GetType(), type)}: ID:{id} IP:{ip} TS:{ts.ToShortTimeString()}";
         }
     }
 }

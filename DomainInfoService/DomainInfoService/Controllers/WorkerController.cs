@@ -36,8 +36,7 @@ namespace DomainInfoService.Controllers
             }
             catch (Exception ex)
             {
-                DomainInfoHostedService.Engine.Cache.Logger.StampEx(ex);
-                return queue;
+                Console.WriteLine($"{ex.Message}: {ex.StackTrace}");
             }
             return queue;
         }
@@ -61,7 +60,7 @@ namespace DomainInfoService.Controllers
                         ID = s.id,
                         IP = s.ip,
                         TaskType = ttype,
-                        Message = s.message,
+                        Data = s.data,
                         State = state,
                         ReportCount = s.rprtcnt,
                         QTS = s.qts,
@@ -79,7 +78,7 @@ namespace DomainInfoService.Controllers
             }
             catch (Exception ex)
             {
-                DomainInfoHostedService.Engine.Cache.Logger.StampEx(ex);
+                Console.WriteLine($"{ex.Message}: {ex.StackTrace}");
             }
         }
     }

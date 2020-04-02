@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace DomainInfoCore.DataObject
 {
@@ -11,7 +9,7 @@ namespace DomainInfoCore.DataObject
         public TaskType TaskType { get; set; }
         public DateTime TS { get; set; }
         public DateTime QTS { get; set; }
-        public string Message { get; set; }
+        public string Data { get; set; }
         public TaskState State { get; set; }
         public int ReportCount { get; set; }
     }

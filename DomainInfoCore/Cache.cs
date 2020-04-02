@@ -1,38 +1,31 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using CoreDefinition;
 using CoreDefinition.Task;
 using DomainInfoCore.DataObject;
 using DomainInfoCore.Tasks;
 
 namespace DomainInfoCore
 {
-    public class Cache : basecache
-    {       
-        List<basetask> tasks;
+    public class Cache
+    {
+        readonly List<basetask> tasks;
+        readonly List<IPRequest> requests;
+        readonly List<TaskResultItem> taskreports;
+        readonly List<IPResult> reports;
+        readonly List<TaskQueueItem> taskqueue;
 
         public List<basetask> Tasks => tasks;
-       
-        readonly List<IPRequest> requests = new List<IPRequest>();
-        readonly List<TaskResultItem> taskreports = new List<TaskResultItem>();
-        readonly List<IPResult> reports = new List<IPResult>();
-        List<TaskQueueItem> taskqueue = new List<TaskQueueItem>();
-
         public List<IPRequest> Requests => requests;
         public List<TaskResultItem> TaskReports => taskreports;
         public List<IPResult> Reports => reports;
         public List<TaskQueueItem> TaskQueue => taskqueue;
 
-        public Cache(string path): base(path)
+        public Cache(string path)
         {
             requests = new List<IPRequest>();
             taskreports = new List<TaskResultItem>();
             reports = new List<IPResult>();
-            LoadTask();
-        }
-
-        bool LoadTask()
-        {
+            taskqueue = new List<TaskQueueItem>();
             tasks = new List<basetask>()
             {
                 /*routines*/
@@ -43,8 +36,6 @@ namespace DomainInfoCore
                     Frequency = 5,
                     },
             };
-
-            return tasks.Count > 0;
         }
 
         public List<TaskResultItem> PurgeRawResult()

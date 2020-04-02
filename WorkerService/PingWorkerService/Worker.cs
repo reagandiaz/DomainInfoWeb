@@ -59,7 +59,7 @@ namespace PingWorkerService
                     await handler.ReportToAPI(toupload);
 
                 _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
-                await Task.Delay(5000, stoppingToken);
+                await Task.Delay(3000, stoppingToken);
             }
         }
 

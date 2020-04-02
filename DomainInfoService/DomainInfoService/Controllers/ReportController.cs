@@ -56,7 +56,6 @@ namespace DomainInfoService.Controllers
             }
             catch (Exception ex)
             {
-                DomainInfoHostedService.Engine.Cache.Logger.StampEx(ex);
                 state.message = $"Error:{ex.Message}";
                 return state;
             }
@@ -74,31 +73,29 @@ namespace DomainInfoService.Controllers
                     var match = DomainInfoHostedService.Engine.Cache.Reports.SingleOrDefault(s => s.ID == qp.Id);
                     if (match == null)
                     {
-                        resp.message = "Message: no partial result yet";
+                        resp.info = "Message: no partial result yet";
                         return resp;
                     }
                     if (qp.Getpartial)
                     {
                         resp.Load(match);
-                        resp.message = match.Complete ? "Message: Complete!" : $"Message: {(resp.reports == null ? 0 : match.TaskReports.Count)} partial result";
+                        resp.info = match.Complete ? "Message: Complete!" : $"Message: {(resp.reports == null ? 0 : match.TaskReports.Count)} partial result";
                         return resp;
                     }
                     if (match.Complete)
                     {
                         resp.Load(match);
-                        resp.message = "Message: Complete!";
+                        resp.info = "Message: Complete!";
                         return resp;
                     }
-                    resp.message = $"Message: {(match.TaskReports.Count)} partial result";
+                    resp.info = $"Message: {(match.TaskReports.Count)} partial result";
                 }
             }
             catch (Exception ex)
             {
-                DomainInfoHostedService.Engine.Cache.Logger.StampEx(ex);
-                resp.message = $"Error:{ex.Message}";
+                resp.info = $"Error:{ex.Message}";
             }
             return resp;
         }
-
     }
 }

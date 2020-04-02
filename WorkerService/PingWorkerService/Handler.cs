@@ -46,7 +46,7 @@ namespace PingWorkerService
                 result.State = "Error";
                 sb.Append(ex.Message);
             }
-            result.Message = sb.ToString();
+            result.Data = sb.ToString();
             result.Ts = DateTime.Now;
             return result;
         }

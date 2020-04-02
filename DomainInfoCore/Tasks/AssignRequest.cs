@@ -1,7 +1,5 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using CoreDefinition.Task;
 using DomainInfoCore.DataObject;
@@ -10,29 +8,28 @@ namespace DomainInfoCore.Tasks
 {
     public class AssignRequest : basetask
     {
-        public AssignRequest(Cache cache) : base(cache) { }
-
-        public override ICollection GetQueue(basecache cache)
+        DomainInfoCore.Cache cache;
+        public AssignRequest(Cache cache)
+        {
+            this.cache = cache;
+        }
+        public override ICollection GetQueue()
         {
             List<TaskQueueItem> queue = new List<TaskQueueItem>();
-            var iprequest = (((DomainInfoCore.Cache)cache).Requests);
-            lock (iprequest)
+            lock (cache.Requests)
             {
-                if (iprequest.Count > 0)
+                if (cache.Requests.Count > 0)
                 {
-                    if (iprequest.Count > 0)
+                    cache.Requests.ForEach(req =>
                     {
-                        iprequest.ForEach(req =>
+                        req.TaskItems.ForEach(ti =>
                         {
-                            req.TaskItems.ForEach(ti =>
-                            {
-                                queue.Add(new TaskQueueItem(req, ti.TaskType));
-                                ti.TaskState = DataObject.TaskState.Processing;
-                            });
+                            queue.Add(new TaskQueueItem(req, ti.TaskType));
+                            ti.TaskState = DataObject.TaskState.Processing;
                         });
-                        //since queue is made
-                        iprequest.Clear();
-                    }
+                    });
+                    //since queue is made
+                    cache.Requests.Clear();
                 }
             }
             return queue;
@@ -40,12 +37,11 @@ namespace DomainInfoCore.Tasks
 
         public override void TaskExecute(ICollection queue)
         {
-            var taskqueue = ((DomainInfoCore.Cache)Cache).TaskQueue;
             Task.Run(() =>
             {
-                lock (taskqueue)
+                lock (cache.TaskQueue)
                 {
-                    taskqueue.AddRange((List<TaskQueueItem>)queue);
+                    cache.TaskQueue.AddRange((List<TaskQueueItem>)queue);
                 }
             });
         }

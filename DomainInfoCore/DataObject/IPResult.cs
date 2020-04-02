@@ -8,7 +8,6 @@ namespace DomainInfoCore.DataObject
     public class IPResult
     {
         const int expiration = 60; //1 minute delete 
-
         public Int64 ID => id;
         public string IP => ip;
         public List<TaskReport> TaskReports => tr;
@@ -21,7 +20,7 @@ namespace DomainInfoCore.DataObject
         readonly List<TaskReport> tr;
         int rpcnt;
         bool exp;
-        
+
         public DateTime CompleteTS { get; set; }
 
         public IPResult(Int64 id, string ip, int rpcnt)
@@ -42,11 +41,9 @@ namespace DomainInfoCore.DataObject
             exp = now.Subtract(CompleteTS).TotalSeconds > expiration;
         }
 
-
         public override string ToString()
         {
-            return String.Format("ID:{0} IP:{1} Ex:{2} Complete:{3}", id, ip, Expired, Complete);
+            return $"ID:{id} IP:{ip} Ex:{Expired} Complete:{Complete}";
         }
     }
-
 }

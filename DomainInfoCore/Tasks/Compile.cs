@@ -1,22 +1,24 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Text;
-using System.Threading;
 using System.Linq;
-using CoreDefinition.Task;
 using DomainInfoCore.DataObject;
 using System.Threading.Tasks;
+using CoreDefinition.Task;
 
 namespace DomainInfoCore.Tasks
 {
     public class Compile : basetask
     {
-        public Compile(Cache cache) : base(cache) { }
-
-        public override ICollection GetQueue(basecache cache)
+        DomainInfoCore.Cache cache;
+        public Compile(Cache cache)
         {
-            var rawresult = ((DomainInfoCore.Cache)cache).PurgeRawResult();
+            this.cache = cache;
+        }
+
+        public override ICollection GetQueue()
+        {
+            var rawresult = cache.PurgeRawResult();
             List<IPResult> queue = new List<IPResult>();
             if (rawresult.Count > 0)
             {
@@ -35,23 +37,22 @@ namespace DomainInfoCore.Tasks
         {
             Task.Run(() =>
             {
-                var resultcache = ((DomainInfoCore.Cache)Cache).Reports;
-                lock (resultcache)
+                lock (cache.Reports)
                 {
                     var now = DateTime.Now;
                     //clean up based on timeout
-                    resultcache.Where(s => s.Complete && !s.Expired).ToList().ForEach(s =>
+                    cache.Reports.Where(s => s.Complete && !s.Expired).ToList().ForEach(s =>
                     {
                         s.FlagExpiration(DateTime.Now);
                     });
 
-                    var expired = resultcache.Where(s => s.Expired).ToList();
+                    var expired = cache.Reports.Where(s => s.Expired).ToList();
                     if (expired.Count > 0)
-                        resultcache.RemoveAll(s => expired.Contains(s));
+                        cache.Reports.RemoveAll(s => expired.Contains(s));
 
                     //merge to resultcache
                     var newdata = (List<IPResult>)queue;
-                    var joinsel = (from t1 in resultcache
+                    var joinsel = (from t1 in cache.Reports
                                    join t2 in newdata on t1.ID equals t2.ID
                                    select new { existing = t1, update = t2 }).ToList();
                     if (joinsel.Count > 0)
@@ -59,14 +60,14 @@ namespace DomainInfoCore.Tasks
 
                     //add new
                     var newsel = (from t1 in newdata
-                                  join t2 in resultcache on t1.ID equals t2.ID into temp
+                                  join t2 in cache.Reports on t1.ID equals t2.ID into temp
                                   from t2 in temp.DefaultIfEmpty()
                                   where t2 == null
                                   select t1).ToList();
-                    resultcache.AddRange(newsel);
+                    cache.Reports.AddRange(newsel);
 
                     //flag complete
-                    resultcache.Where(s => !s.Complete && s.ReportCount == s.TaskReports.Count).ToList().ForEach(s => { s.Complete = true; s.CompleteTS = DateTime.Now; });
+                    cache.Reports.Where(s => !s.Complete && s.ReportCount == s.TaskReports.Count).ToList().ForEach(s => { s.Complete = true; s.CompleteTS = DateTime.Now; });
                 }
             });
         }

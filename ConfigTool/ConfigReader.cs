@@ -10,7 +10,7 @@ namespace ConfigTool
         public T Config => config;
         public ConfigReader(string jsonfile, T taget)
         {
-            FileInfo info = new FileInfo($"{AppContext.BaseDirectory}\\{jsonfile}");
+            FileInfo info = new FileInfo($"{AppContext.BaseDirectory}//{jsonfile}");
             if (info.Exists)
             {
                 StreamReader reader = null;

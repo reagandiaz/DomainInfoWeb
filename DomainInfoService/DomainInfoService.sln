@@ -19,11 +19,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConfigTool", "..\ConfigTool
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ReverseDNSWorkerService", "..\WorkerService\ReverseDNSWorkerService\ReverseDNSWorkerService.csproj", "{3C05A330-8C9D-47BA-91DF-8782DA284CF8}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{4582A2B6-9762-4D58-A9A0-0774EF173E80}"
-	ProjectSection(SolutionItems) = preProject
-		..\WorkerService\PingWorkerService\PingWorkerService.csproj = ..\WorkerService\PingWorkerService\PingWorkerService.csproj
-	EndProjectSection
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PingWorkerService", "..\WorkerService\PingWorkerService\PingWorkerService.csproj", "{558C5499-0642-4DFC-AB6B-6E7371D63997}"
 EndProject
 Global

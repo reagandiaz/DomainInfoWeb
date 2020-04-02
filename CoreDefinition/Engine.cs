@@ -8,18 +8,18 @@ namespace CoreDefinition
 {
     public abstract class Engine : IDisposable
     {
-        System.Timers.Timer _tasktimer;
-        const int _TaskRefresh = 1000;
-        bool _isbusy;
+        System.Timers.Timer tasktimer;
+        const int refresh = 1000;
+        bool isbusy;
         public List<basetask> tasks;
 
         void TaskTick(object sender, ElapsedEventArgs e)
         {
-            if (!_isbusy)
+            if (!isbusy)
             {
-                _isbusy = true;
+                isbusy = true;
                 tasks.ForEach(x => x.Execute());
-                _isbusy = false;
+                isbusy = false;
             }
         }
 
@@ -30,16 +30,16 @@ namespace CoreDefinition
             Initialize();
             (new Thread(new ThreadStart(() =>
             {
-                _tasktimer = new System.Timers.Timer(_TaskRefresh);
-                _tasktimer.Elapsed += new ElapsedEventHandler(TaskTick);
-                _tasktimer.Enabled = true;
+                tasktimer = new System.Timers.Timer(refresh);
+                tasktimer.Elapsed += new ElapsedEventHandler(TaskTick);
+                tasktimer.Enabled = true;
             }))).Start();
         }
 
         public void Stop()
         {
-            if (_tasktimer != null)
-                _tasktimer.Stop();
+            if (tasktimer != null)
+                tasktimer.Stop();
         }
 
         public void Dispose()
@@ -52,10 +52,10 @@ namespace CoreDefinition
         {
             if (disposing)
             {
-                if (_tasktimer != null)
+                if (tasktimer != null)
                 {
-                    _tasktimer.Close();
-                    _tasktimer.Dispose();
+                    tasktimer.Close();
+                    tasktimer.Dispose();
                 }
             }
         }

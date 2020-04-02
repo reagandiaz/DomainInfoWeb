@@ -42,17 +42,20 @@ namespace GeoIPWorkerService
                     sb.Append("Not Found");
                 else
                 {
+                    sb.Append(responseFromServer);
+                    /*
                     sb.Append($"{myJObject.SelectToken("continent_name").Value<string>()}, ");
                     sb.Append($"{myJObject.SelectToken("country_name").Value<string>()}, ");
                     sb.Append($"{myJObject.SelectToken("region_name").Value<string>()}, ");
                     sb.Append($"{myJObject.SelectToken("city").Value<string>()}");
+                    */
                 }
-                result.Message = sb.ToString();
+                result.Data = sb.ToString();
                 result.State = "Complete";
             }
             catch (Exception ex)
             {
-                result.Message = ex.Message;
+                result.Data = ex.Message;
                 result.State = "Error";
             }
             finally
