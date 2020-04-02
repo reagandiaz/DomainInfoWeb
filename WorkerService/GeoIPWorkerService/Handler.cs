@@ -55,7 +55,7 @@ namespace GeoIPWorkerService
             }
             catch (Exception ex)
             {
-                result.Data = ex.Message;
+                result.Data = $"{ex.Message}:{ex.StackTrace}";
                 result.State = "Error";
             }
             finally

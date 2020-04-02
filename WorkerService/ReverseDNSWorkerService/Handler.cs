@@ -32,8 +32,16 @@ namespace ReverseDNSWorkerService
             }
             catch (System.Exception ex)
             {
-                result.Data = $"{ ex.Message}:{ex.StackTrace}";
-                result.State = "Error";
+                if (ex.Message.Contains("No such host is known"))
+                {
+                    result.Data = "No such host is known";
+                    result.State = "Complete";
+                }
+                else
+                {
+                    result.Data = $"{ex.Message}:{ex.StackTrace}";
+                    result.State = "Error";
+                }
             }
             result.Ts = DateTime.Now;
             return result;

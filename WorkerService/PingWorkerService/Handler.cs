@@ -43,8 +43,8 @@ namespace PingWorkerService
             }
             catch (Exception ex)
             {
-                result.State = "Error";
-                sb.Append(ex.Message);
+                result.State = "Complete";
+                sb.Append($"Ping request could not find host: {ex.Message}");
             }
             result.Data = sb.ToString();
             result.Ts = DateTime.Now;
