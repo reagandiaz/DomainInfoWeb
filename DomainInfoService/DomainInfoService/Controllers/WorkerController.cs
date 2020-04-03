@@ -42,7 +42,7 @@ namespace DomainInfoService.Controllers
         }
 
         [HttpPost]
-        public void LoadReport(string task, List<WorkerReportItem> items)
+        public void LoadReports(string task, List<WorkerReportItem> items)
         {
             try
             {

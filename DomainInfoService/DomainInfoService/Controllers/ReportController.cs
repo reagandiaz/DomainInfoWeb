@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using DomainInfoService.Background;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace DomainInfoService.Controllers
 {
@@ -96,6 +98,49 @@ namespace DomainInfoService.Controllers
                 resp.info = $"Error:{ex.Message}";
             }
             return resp;
+        }
+
+        [HttpGet]
+        public async Task Get(int id)
+        {
+            Response.Headers.Add("Content-Type", "text/event-stream");
+            Models.Report resp = new Models.Report() { id = id };
+            int retry = 5;
+            try
+            {
+                while (retry > 0)
+                {
+                    lock (DomainInfoHostedService.Engine.Cache.Reports)
+                    {
+                        var match = DomainInfoHostedService.Engine.Cache.Reports.SingleOrDefault(s => s.ID == id);
+                        if (match == null)
+                            resp.info = "Message: no partial result yet";
+                        else
+                        {
+                            resp.Load(match);
+                            if (match.Complete)
+                            {
+                                resp.info = "Message: Complete!";
+                                retry = 0;
+                            }
+                            else
+                                resp.info = $"Message: {(resp.reports == null ? 0 : match.TaskReports.Count)} partial result";
+                        }
+                    }
+                    byte[] messageBytes = ASCIIEncoding.ASCII.GetBytes(JsonConvert.SerializeObject(resp));
+                    await Response.Body.WriteAsync(messageBytes, 0, messageBytes.Length);
+                    await Response.Body.FlushAsync();
+                    await Task.Delay(TimeSpan.FromSeconds(3));
+                    retry--;
+                }
+            }
+            catch (Exception ex)
+            {
+                resp.info = $"Error:{ex.Message} : {ex.StackTrace}";
+                byte[] messageBytes = ASCIIEncoding.ASCII.GetBytes(JsonConvert.SerializeObject(resp));
+                await Response.Body.WriteAsync(messageBytes, 0, messageBytes.Length);
+                await Response.Body.FlushAsync();
+            }
         }
     }
 }
