@@ -30,10 +30,10 @@ namespace DomainInfoCore
             {
                 /*routines*/
                 new AssignRequest(this){
-                    Frequency = 5,
+                    Frequency = 3,
                     },
                 new Compile(this){
-                    Frequency = 5,
+                    Frequency = 3,
                     },
             };
         }

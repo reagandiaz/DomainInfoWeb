@@ -13,7 +13,7 @@ namespace DomainInfoService.Controllers
     [Route("[controller]")]
     public class WorkerController : Controller
     {
-        [HttpPut]
+        [HttpGet]
         public List<WorkerQueueItem> GetQueue(string task)
         {
             List<WorkerQueueItem> queue = new List<WorkerQueueItem>();

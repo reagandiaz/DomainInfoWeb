@@ -75,22 +75,22 @@ namespace DomainInfoService.Controllers
                     var match = DomainInfoHostedService.Engine.Cache.Reports.SingleOrDefault(s => s.ID == qp.Id);
                     if (match == null)
                     {
-                        resp.info = "Message: no partial result yet";
+                        resp.info = "No partial results yet";
                         return resp;
                     }
                     if (qp.Getpartial)
                     {
                         resp.Load(match);
-                        resp.info = match.Complete ? "Message: Complete!" : $"Message: {(resp.reports == null ? 0 : match.TaskReports.Count)} partial result";
+                        resp.info = match.Complete ? "Complete!" : $"{(resp.reports == null ? 0 : match.TaskReports.Count)} partial result/s";
                         return resp;
                     }
                     if (match.Complete)
                     {
                         resp.Load(match);
-                        resp.info = "Message: Complete!";
+                        resp.info = "Complete!";
                         return resp;
                     }
-                    resp.info = $"Message: {(match.TaskReports.Count)} partial result";
+                    resp.info = $"{(match.TaskReports.Count)} partial result/s";
                 }
             }
             catch (Exception ex)
@@ -114,22 +114,26 @@ namespace DomainInfoService.Controllers
                     {
                         var match = DomainInfoHostedService.Engine.Cache.Reports.SingleOrDefault(s => s.ID == id);
                         if (match == null)
-                            resp.info = "Message: no partial result yet";
+                            resp.info = "No partial results yet";
                         else
                         {
                             resp.Load(match);
                             if (match.Complete)
                             {
-                                resp.info = "Message: Complete!";
+                                resp.info = "Complete!";
                                 retry = 0;
                             }
                             else
-                                resp.info = $"Message: {(resp.reports == null ? 0 : match.TaskReports.Count)} partial result";
+                                resp.info = $"{(resp.reports == null ? 0 : match.TaskReports.Count)} partial result/s";
                         }
                     }
                     byte[] messageBytes = ASCIIEncoding.ASCII.GetBytes(JsonConvert.SerializeObject(resp));
                     await Response.Body.WriteAsync(messageBytes, 0, messageBytes.Length);
                     await Response.Body.FlushAsync();
+                   
+                    if (retry == 0)
+                        break;
+
                     await Task.Delay(TimeSpan.FromSeconds(3));
                     retry--;
                 }

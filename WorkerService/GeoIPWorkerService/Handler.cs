@@ -42,13 +42,17 @@ namespace GeoIPWorkerService
                     sb.Append("Not Found");
                 else
                 {
-                    sb.Append(responseFromServer);
-                    /*
-                    sb.Append($"{myJObject.SelectToken("continent_name").Value<string>()}, ");
-                    sb.Append($"{myJObject.SelectToken("country_name").Value<string>()}, ");
-                    sb.Append($"{myJObject.SelectToken("region_name").Value<string>()}, ");
-                    sb.Append($"{myJObject.SelectToken("city").Value<string>()}");
-                    */
+                    //sb.Append(responseFromServer);
+                    sb.Append($"continent_code: {myJObject.SelectToken("continent_code").Value<string>()}, ");
+                    sb.Append($"continent_name: {myJObject.SelectToken("continent_name").Value<string>()}, ");
+                    sb.Append($"country_code: {myJObject.SelectToken("country_code").Value<string>()}, ");
+                    sb.Append($"country_name: {myJObject.SelectToken("country_name").Value<string>()}");
+                    sb.Append($"region_code: {myJObject.SelectToken("region_code").Value<string>()}, ");
+                    sb.Append($"region_name: {myJObject.SelectToken("region_name").Value<string>()}, ");
+                    sb.Append($"city: {myJObject.SelectToken("city").Value<string>()}, ");
+                    sb.Append($"zip: {myJObject.SelectToken("zip").Value<string>()}");
+                    sb.Append($"latitude: {myJObject.SelectToken("zip").Value<double>()}");
+                    sb.Append($"longitude: {myJObject.SelectToken("zip").Value<double>()}");
                 }
                 result.Data = sb.ToString();
                 result.State = "Complete";
