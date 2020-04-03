@@ -31,11 +31,11 @@ namespace PingWorkerService
                 PingReply reply = pingSender.Send(wqi.Ip, timeout, buffer, options);
                 if (reply.Status == IPStatus.Success)
                 {
-                    sb.Append($"Address: {reply.Address} ");
-                    sb.Append($"RoundTrip: {reply.RoundtripTime} ");
-                    sb.Append($"TimeTolive: {reply.Options.Ttl} ");
-                    sb.Append($"DontFragment: {reply.Options.DontFragment} ");
-                    sb.Append($"BufferSize: {reply.Buffer.Length}");
+                    sb.Append($"Address:{reply.Address},");
+                    sb.Append($"RoundTrip:{reply.RoundtripTime},");
+                    sb.Append($"TimeTolive:{reply.Options.Ttl},");
+                    sb.Append($"DontFragment:{reply.Options.DontFragment},");
+                    sb.Append($"BufferSize:{reply.Buffer.Length}");
                 }
                 else
                     sb.Append(reply.Status);
